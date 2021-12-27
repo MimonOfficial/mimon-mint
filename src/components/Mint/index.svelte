@@ -24,12 +24,12 @@
                 <div class="sale-count">100% 달성</div>
                 <div class="sale-count">9999/10000</div>
               </div>
-              <input class="sale-button" placeholder=" Input Amount" type="text" />
+              <input class="sale-amount" placeholder="1 ~ 15" type="text" />
             </div>
             <div class="divide-line" />
             <div class="info-price">
               <div class="price-title">Total</div>
-              <div class="price-value"><b>6 Eth</b> + Gas</div>
+              <div class="price-value"><b>0.6 Eth</b> + Gas</div>
             </div>
             <div class="mint-button">Wallet Connect</div>
             <div class="info-link">Go to the Mimon Opensea collection</div>
@@ -124,7 +124,7 @@
     text-align: center;
     margin-bottom: 20px;
     color: #333333;
-    line-height: 20px;
+    line-height: 16px;
   }
 
   .info-left-amount {
@@ -144,7 +144,7 @@
       margin-bottom: 5px;
     }
 
-    .sale-button {
+    .sale-amount {
       width: 50%;
       background-color: #f096a7;
       padding: 8px;
@@ -189,6 +189,11 @@
     box-sizing: border-box;
     margin-bottom: 20px;
     font-weight: bold;
+    cursor: pointer;
+  }
+
+  .mint-button:active {
+    opacity: 0.6;
   }
 
   .info-link {
