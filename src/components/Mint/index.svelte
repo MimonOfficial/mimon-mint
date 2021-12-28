@@ -133,6 +133,7 @@
   .img-wrap {
     background-color: #f096a7;
     width: 100%;
+    max-width: 300px;
     display: flex;
     justify-content: center;
     padding: 15px;
@@ -145,6 +146,7 @@
 
   .info-wrap {
     width: 100%;
+    max-width: 400px;
     display: flex;
     flex-direction: column;
     justify-content: center;
