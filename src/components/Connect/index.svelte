@@ -39,20 +39,8 @@
     //   ]
     // })
     await ethereum.request({
-      method: 'wallet_addEthereumChain',
-      params: [
-        {
-          chainId: '0x89',
-          chainName: 'Polygon Mainnet',
-          nativeCurrency: {
-            name: 'Matic',
-            symbol: 'MATIC',
-            decimals: 18,
-          },
-          rpcUrls: ['https://polygon-rpc.com/'],
-          blockExplorerUrls: ['https://polygonscan.com/'],
-        },
-      ],
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: '0x1' }],
     })
   }
 
