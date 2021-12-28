@@ -1,4 +1,14 @@
-<script>
+<script lang="ts">
+  import Connect from '@/components/Connect/index.svelte'
+  import MintButton from './MintButton.svelte'
+  import { isConnect, myAddressShort, mintAmount } from '@/stores'
+
+  function onInputCheck(e: any) {
+    if (!/^([1-9]{1}|1[0-5]{1})$/.test(e.target.value)) {
+      e.target.value = ''
+      $mintAmount = null
+    }
+  }
 </script>
 
 <div class="background">
@@ -17,21 +27,32 @@
               various attributes is a form of fantasy in which latent desires are expressed in human
               dreams. Face to face your subconscious desires.
             </div>
-            <div class="info-left-amount">10000 남음</div>
+            <div class="my-address">My Address: {$myAddressShort}</div>
             <div class="divide-line" />
             <div class="info-sale-active">
               <div class="sale-state">
                 <div class="sale-count">100% 달성</div>
                 <div class="sale-count">9999/10000</div>
               </div>
-              <input class="sale-amount" placeholder="1 ~ 15" type="text" />
+              <input
+                class="sale-amount"
+                placeholder="1 ~ 15"
+                type="text"
+                disabled={!$isConnect}
+                bind:value={$mintAmount}
+                on:input={onInputCheck}
+              />
             </div>
             <div class="divide-line" />
             <div class="info-price">
               <div class="price-title">Total</div>
               <div class="price-value"><b>0.6 Eth</b> + Gas</div>
             </div>
-            <div class="mint-button">Wallet Connect</div>
+            {#if $isConnect}
+              <MintButton />
+            {:else}
+              <Connect />
+            {/if}
             <div class="info-link">Go to the Mimon Opensea collection</div>
           </div>
         </div>
@@ -127,7 +148,7 @@
     line-height: 16px;
   }
 
-  .info-left-amount {
+  .my-address {
     font-size: 1.3rem;
     font-weight: bold;
     margin-bottom: 10px;
@@ -175,25 +196,6 @@
       text-align: end;
       color: #f096a7;
     }
-  }
-
-  .mint-button {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    padding: 10px;
-    background-color: #f096a7;
-    border-radius: 10px;
-    font-size: 1.3rem;
-    color: white;
-    box-sizing: border-box;
-    margin-bottom: 20px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  .mint-button:active {
-    opacity: 0.6;
   }
 
   .info-link {
