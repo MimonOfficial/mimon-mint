@@ -1,12 +1,23 @@
 <script lang="ts">
+  import { ethers } from 'ethers'
   import Connect from '@/components/Connect/index.svelte'
   import MintButton from './MintButton.svelte'
   import { isConnect, myAddressShort, mintAmount } from '@/stores'
 
+  let mintPrice: any = 0
   function onInputCheck(e: any) {
     if (!/^([1-9]{1}|1[0-5]{1})$/.test(e.target.value)) {
       e.target.value = ''
       $mintAmount = null
+    }
+  }
+
+  function getMintPrice() {
+    let defaultPrice: any = ethers.utils.formatEther('60000000000000000')
+    if ($mintAmount > 0) {
+      mintPrice = (defaultPrice * $mintAmount).toFixed(2)
+    } else {
+      mintPrice = 0
     }
   }
 </script>
@@ -31,7 +42,7 @@
             <div class="divide-line" />
             <div class="info-sale-active">
               <div class="sale-state">
-                <div class="sale-count">100% 달성</div>
+                <div class="sale-count">100% Complete</div>
                 <div class="sale-count">9999/10000</div>
               </div>
               <input
@@ -40,20 +51,25 @@
                 type="text"
                 disabled={!$isConnect}
                 bind:value={$mintAmount}
-                on:input={onInputCheck}
+                on:input={(e) => {
+                  onInputCheck(e)
+                  getMintPrice()
+                }}
               />
             </div>
             <div class="divide-line" />
             <div class="info-price">
               <div class="price-title">Total</div>
-              <div class="price-value"><b>0.6 Eth</b> + Gas</div>
+              <div class="price-value"><b>{mintPrice} Eth</b> + Gas</div>
             </div>
             {#if $isConnect}
               <MintButton />
             {:else}
               <Connect />
             {/if}
-            <div class="info-link">Go to the Mimon Opensea collection</div>
+            <a class="info-link" href="https://opensea.io/collection/mimon" target="_blank">
+              Go to the Mimon Opensea collection
+            </a>
           </div>
         </div>
       </div>
