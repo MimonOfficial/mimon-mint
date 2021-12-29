@@ -32,26 +32,26 @@
   }
 
   async function addChain() {
-    await ethereum.request({
-      method: 'wallet_addEthereumChain',
-      params: [
-        {
-          chainId: '0x4bd',
-          chainName: 'Popcateum',
-          nativeCurrency: {
-            name: 'Popcat',
-            symbol: 'POP',
-            decimals: 18,
-          },
-          rpcUrls: ['https://dataseed.popcateum.org'],
-          blockExplorerUrls: ['https://explorer.popcateum.org'],
-        },
-      ],
-    })
     // await ethereum.request({
-    //   method: 'wallet_switchEthereumChain',
-    //   params: [{ chainId: '0x1' }],
+    //   method: 'wallet_addEthereumChain',
+    //   params: [
+    //     {
+    //       chainId: '0x4bd',
+    //       chainName: 'Popcateum',
+    //       nativeCurrency: {
+    //         name: 'Popcat',
+    //         symbol: 'POP',
+    //         decimals: 18,
+    //       },
+    //       rpcUrls: ['https://dataseed.popcateum.org'],
+    //       blockExplorerUrls: ['https://explorer.popcateum.org'],
+    //     },
+    //   ],
     // })
+    await ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: '0x1' }],
+    })
   }
 
   async function getInfo() {
