@@ -1,9 +1,10 @@
 <script lang="ts">
+  export let preSale: any
   import { mintAmount } from '@/stores'
 </script>
 
 {#if $mintAmount}
-  <div class="mint-button">Mint</div>
+  <div class="mint-button" on:click="{preSale}">Mint</div>
 {:else}
   <div class="mint-button-unactive">Mint</div>
 {/if}

@@ -1,9 +1,19 @@
 <script lang="ts">
   import { ethers } from 'ethers'
   import { onDestroy } from 'svelte'
-  import { isConnect, myAddress, myAddressShort, signer, provider } from '@/stores'
+  import {
+    isConnect,
+    myAddress,
+    myAddressShort,
+    signer,
+    provider,
+    myBalance,
+    MimonSaleContract,
+    isWhitelist,
+    isPreSaleCount,
+  } from '@/stores'
   const ethereum: any | undefined = (window as any).ethereum
-  let decimals = 1e18
+  import MimonSaleABI from '@/data/abi/MimonSale.json'
 
   onDestroy(() => {
     if ($isConnect === true) {
@@ -22,37 +32,41 @@
   }
 
   async function addChain() {
-    // await ethereum.request({
-    //   method: 'wallet_addEthereumChain',
-    //   params: [
-    //     {
-    //       chainId: '0x4bd',
-    //       chainName: 'Popcateum',
-    //       nativeCurrency: {
-    //         name: 'Popcat',
-    //         symbol: 'POP',
-    //         decimals: 18
-    //       },
-    //       rpcUrls: ['https://dataseed.popcateum.org'],
-    //       blockExplorerUrls: ['https://explorer.popcateum.org']
-    //     }
-    //   ]
-    // })
     await ethereum.request({
-      method: 'wallet_switchEthereumChain',
-      params: [{ chainId: '0x1' }],
+      method: 'wallet_addEthereumChain',
+      params: [
+        {
+          chainId: '0x4bd',
+          chainName: 'Popcateum',
+          nativeCurrency: {
+            name: 'Popcat',
+            symbol: 'POP',
+            decimals: 18,
+          },
+          rpcUrls: ['https://dataseed.popcateum.org'],
+          blockExplorerUrls: ['https://explorer.popcateum.org'],
+        },
+      ],
     })
+    // await ethereum.request({
+    //   method: 'wallet_switchEthereumChain',
+    //   params: [{ chainId: '0x1' }],
+    // })
   }
 
   async function getInfo() {
     $provider = new ethers.providers.Web3Provider(ethereum)
     $signer = $provider.getSigner()
     await getAddress()
+    await getBalance()
+    await getIsWhitelist()
   }
 
   function changed() {
     ethereum.on('accountsChanged', async () => {
       await getAddress()
+      await getBalance()
+      await getIsWhitelist()
     })
   }
 
@@ -66,8 +80,14 @@
     $myAddressShort = `${$myAddress.slice(0, 6)}...${$myAddress.slice(-4)}`
   }
 
-  function getConnect() {
-    console.log($isConnect)
+  async function getBalance() {
+    $myBalance = ethers.utils.formatEther(await $provider.getBalance($myAddress))
+  }
+
+  async function getIsWhitelist() {
+    const mimonSaleContract = new ethers.Contract($MimonSaleContract, MimonSaleABI, $signer)
+    $isPreSaleCount = 3 - (await mimonSaleContract.preSaleCount($myAddress))
+    $isWhitelist = await mimonSaleContract.whitelist($myAddress)
   }
 </script>
 

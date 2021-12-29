@@ -1,10 +1,39 @@
 <script lang="ts">
   import { ethers } from 'ethers'
+  import { Diamonds } from 'svelte-loading-spinners'
   import Connect from '@/components/Connect/index.svelte'
   import MintButton from './MintButton.svelte'
-  import { isConnect, myAddressShort, mintAmount } from '@/stores'
+  import {
+    isConnect,
+    myAddressShort,
+    mintAmount,
+    myAddress,
+    signer,
+    MimonSaleContract,
+    isWhitelist,
+    isPreSaleCount,
+    ethereumRPC,
+    MimonContract,
+  } from '@/stores'
+
+  const ethereumProvider = new ethers.providers.JsonRpcProvider($ethereumRPC)
+  const mimonContract = new ethers.Contract($MimonContract, MimonABI, ethereumProvider)
+  import MimonSaleABI from '@/data/abi/MimonSale.json'
+  import MimonABI from '@/data/abi/Mimon.json'
+  import { onMount } from 'svelte'
+
+  const PRESALE_PRICE: any = ethers.utils.formatEther('40000000000000000')
+  const PUBLICSALE_PRICE: any = ethers.utils.formatEther('60000000000000000')
 
   let mintPrice: any = 0
+  let mimonTotalSupply: any = 0
+  let mimonTotalPercent: any = 0
+  let spinnerState = false
+
+  onMount(() => {
+    calcMimonTotalSupply()
+  })
+
   function onInputCheck(e: any) {
     if (!/^([1-9]{1}|1[0-5]{1})$/.test(e.target.value)) {
       e.target.value = ''
@@ -12,13 +41,74 @@
     }
   }
 
-  function getMintPrice() {
-    let defaultPrice: any = ethers.utils.formatEther('60000000000000000')
+  function onInputCheckPreSale(e: any) {
+    if (!/^([1-3]{1})$/.test(e.target.value)) {
+      e.target.value = ''
+      $mintAmount = null
+    }
+  }
+
+  async function preSale() {
+    const mimonSaleContract = new ethers.Contract($MimonSaleContract, MimonSaleABI, $signer)
+    let isPreSale = await mimonSaleContract.isPreSale()
+    if ($isWhitelist === false) {
+      alert('Only registered users on the whitelist can participate in the pre-sale.')
+      return
+    }
+    let overrides = {
+      value: ethers.utils.parseEther(mintPrice),
+    }
+    const transaction = await mimonSaleContract
+      .preSale($mintAmount, overrides)
+      .catch((data: any) => {
+        if (isPreSale === false) {
+          alert('The pre-sale has not started yet.')
+          setSpinner()
+          return
+        }
+        if ($isPreSaleCount < $mintAmount) {
+          alert('Please check the amount of mint')
+          setSpinner()
+          return
+        }
+        if (data.code === 4001) {
+          alert('The transaction has been canceled.')
+          setSpinner()
+          return
+        }
+      })
+    setSpinner()
+    await transaction.wait()
+    $mintAmount = null
+    $isPreSaleCount = 3 - (await mimonSaleContract.preSaleCount($myAddress))
+    getPreSalePrice()
+    calcMimonTotalSupply()
+    setSpinner()
+  }
+
+  function getPreSalePrice() {
     if ($mintAmount > 0) {
-      mintPrice = (defaultPrice * $mintAmount).toFixed(2)
+      mintPrice = (PRESALE_PRICE * $mintAmount).toFixed(2)
     } else {
       mintPrice = 0
     }
+  }
+
+  function getPublicSalePrice() {
+    if ($mintAmount > 0) {
+      mintPrice = (PUBLICSALE_PRICE * $mintAmount).toFixed(2)
+    } else {
+      mintPrice = 0
+    }
+  }
+
+  async function calcMimonTotalSupply() {
+    mimonTotalSupply = await mimonContract.totalSupply()
+    mimonTotalPercent = (mimonTotalSupply / 10000) * 100
+  }
+
+  function setSpinner() {
+    spinnerState = !spinnerState
   }
 </script>
 
@@ -39,21 +129,29 @@
               dreams. Face to face your subconscious desires.
             </div>
             <div class="my-address">My Address: {$myAddressShort}</div>
+            {#if $isConnect && $isWhitelist}
+              <div class="simple-text">You are Whitelisted, you can mint {$isPreSaleCount}</div>
+            {:else if $isConnect && $isWhitelist === false}
+              <div class="simple-text">
+                You are not on the white list. Please wait for the public sale.
+              </div>
+            {/if}
+
             <div class="divide-line" />
             <div class="info-sale-active">
               <div class="sale-state">
-                <div class="sale-count">100% Complete</div>
-                <div class="sale-count">9999/10000</div>
+                <div class="sale-count">{mimonTotalPercent}% Complete</div>
+                <div class="sale-count">{mimonTotalSupply}/10000</div>
               </div>
               <input
                 class="sale-amount"
-                placeholder="1 ~ 15"
+                placeholder="1 ~ 3"
                 type="text"
                 disabled={!$isConnect}
                 bind:value={$mintAmount}
                 on:input={(e) => {
-                  onInputCheck(e)
-                  getMintPrice()
+                  onInputCheckPreSale(e)
+                  getPreSalePrice()
                 }}
               />
             </div>
@@ -63,7 +161,7 @@
               <div class="price-value"><b>{mintPrice} Eth</b> + Gas</div>
             </div>
             {#if $isConnect}
-              <MintButton />
+              <MintButton {preSale} />
             {:else}
               <Connect />
             {/if}
@@ -76,6 +174,11 @@
     </div>
   </div>
 </div>
+{#if spinnerState}
+  <div class="spiner">
+    <Diamonds size="60" color="#f096a7" unit="px" duration="1s" />
+  </div>
+{/if}
 
 <style lang="scss">
   .background {
@@ -133,7 +236,7 @@
   .img-wrap {
     background-color: #f096a7;
     width: 100%;
-    max-width: 300px;
+    max-width: 400px;
     display: flex;
     justify-content: center;
     padding: 15px;
@@ -159,7 +262,7 @@
   }
 
   .info-explain {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     text-align: center;
     margin-bottom: 20px;
     color: #333333;
@@ -167,7 +270,7 @@
   }
 
   .my-address {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     font-weight: bold;
     margin-bottom: 10px;
   }
@@ -221,6 +324,26 @@
     color: #f096a7;
     font-size: 0.8rem;
     text-align: center;
+  }
+
+  .simple-text {
+    width: 100%;
+    color: #f096a7;
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+  }
+
+  .spiner {
+    z-index: 100;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100vh;
   }
 
   @media screen and (max-width: 768px) {
