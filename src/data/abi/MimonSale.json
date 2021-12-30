@@ -15,6 +15,11 @@
         "internalType": "address",
         "name": "_C2",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_dev",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -61,7 +66,33 @@
   },
   {
     "inputs": [],
+    "name": "MAX_PRESALE_SUPPLY",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "MAX_PUBLICSALE_AMOUNT",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "MAX_TOKEN_SUPPLY",
     "outputs": [
       {
         "internalType": "uint256",
@@ -80,6 +111,19 @@
         "internalType": "contract IMimon",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "PRESALE_PRICE",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -109,6 +153,19 @@
     "name": "addToWhitelist",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "devAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -201,6 +258,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "publicSalePrice",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -240,6 +310,19 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "changeAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setDev",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "setPreSale",
     "outputs": [],
@@ -249,6 +332,19 @@
   {
     "inputs": [],
     "name": "setPublicSale",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      }
+    ],
+    "name": "setPublicSalePrice",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

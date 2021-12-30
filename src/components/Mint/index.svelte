@@ -10,7 +10,6 @@
     myAddress,
     signer,
     MimonSaleContract,
-    isWhitelist,
     isPreSaleCount,
     ethereumRPC,
     MimonContract,
@@ -125,13 +124,14 @@
           <div class="info-wrap">
             <div class="info-title">Fulfill your desire, Mimon</div>
             <div class="info-explain">
-              various attributes is a form of fantasy in which latent desires are expressed in human
-              dreams. Face to face your subconscious desires.
+              Pre sale : 0.04 ETH Maximum mint quantity : 3 Mimons
+              <br />
+              Public sale : 0.06 ETH Maximum mint quantity : 15 Mimons
             </div>
             <div class="my-address">My Address: {$myAddressShort}</div>
             {#if $isConnect}
               <div class="simple-text">You are Whitelisted, you can mint {$isPreSaleCount}</div>
-            <!-- {:else if $isConnect && $isWhitelist === false}
+              <!-- {:else if $isConnect && $isWhitelist === false}
               <div class="simple-text">
                 You are not on the white list. Please wait for the public sale.
               </div> -->
