@@ -75,6 +75,11 @@
           setSpinner()
           return
         }
+        if (data.code === 'INSUFFICIENT_FUNDS') {
+          alert(`You don't have enough Ether in your wallet.`)
+          setSpinner()
+          return
+        }
       })
     setSpinner()
     await transaction.wait()
