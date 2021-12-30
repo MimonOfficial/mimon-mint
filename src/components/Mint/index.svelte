@@ -108,7 +108,7 @@
 
   async function calcMimonTotalSupply() {
     mimonTotalSupply = await mimonContract.totalSupply()
-    mimonTotalPercent = (mimonTotalSupply / 10000) * 100
+    mimonTotalPercent = ((mimonTotalSupply / 10000) * 100).toFixed(1)
   }
 
   function setSpinner() {
