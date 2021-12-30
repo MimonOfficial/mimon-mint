@@ -13,7 +13,7 @@ export const ethereumRPC: any = readable('https://mainnet.infura.io/v3/9aa3d95b3
 export const MimonContract: any = readable('0x7fb4a2249fd66510c1d77B99454cd6B968DaF5F7')
 
 // Sale Contract
-export const MimonSaleContract: any = readable('0x7CFf12B23C868ae4b38CCe68B1a2c5DAe7eDB94b')
+export const MimonSaleContract: any = readable('0xA33aAE8Bda6518838e2d027B1a71AB7735F0093D')
 export const mintAmount:any = writable(null)
 export const isWhitelist: any = writable(null)
 export const isPreSaleCount: any = writable(false)
