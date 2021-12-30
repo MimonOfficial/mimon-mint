@@ -51,10 +51,10 @@
   async function preSale() {
     const mimonSaleContract = new ethers.Contract($MimonSaleContract, MimonSaleABI, $signer)
     let isPreSale = await mimonSaleContract.isPreSale()
-    if ($isWhitelist === false) {
-      alert('Only registered users on the whitelist can participate in the pre-sale.')
-      return
-    }
+    // if ($isWhitelist === false) {
+    //   alert('Only registered users on the whitelist can participate in the pre-sale.')
+    //   return
+    // }
     let overrides = {
       value: ethers.utils.parseEther(mintPrice),
     }
@@ -129,12 +129,12 @@
               dreams. Face to face your subconscious desires.
             </div>
             <div class="my-address">My Address: {$myAddressShort}</div>
-            {#if $isConnect && $isWhitelist}
+            {#if $isConnect}
               <div class="simple-text">You are Whitelisted, you can mint {$isPreSaleCount}</div>
-            {:else if $isConnect && $isWhitelist === false}
+            <!-- {:else if $isConnect && $isWhitelist === false}
               <div class="simple-text">
                 You are not on the white list. Please wait for the public sale.
-              </div>
+              </div> -->
             {/if}
 
             <div class="divide-line" />
