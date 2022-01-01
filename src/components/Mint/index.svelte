@@ -61,7 +61,7 @@
       .preSale($mintAmount, overrides)
       .catch((data: any) => {
         if (isPreSale === false) {
-          alert('The pre-sale has not started yet.')
+          alert('The public-sale has not started yet.')
           setSpinner()
           return
         }
