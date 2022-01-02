@@ -25,6 +25,7 @@
   let mimonTotalSupply: any = 0
   let mimonTotalPercent: any = 0
   let spinnerState = false
+  let defaultImg = '/assets/mimonq.png'
 
   onMount(() => {
     calcMimonTotalSupply()
@@ -70,6 +71,12 @@
     setSpinner()
   }
 
+  // async function mintedImg() {
+  //   const apiData = await axios.get(`https://api.mimons.io/mimon/${1}`)
+  //   console.log(apiData.data.image)
+  //   defaultImg = apiData.data.image
+  // }
+
   function getPublicSalePrice() {
     if ($mintAmount > 0) {
       mintPrice = (PUBLICSALE_PRICE * $mintAmount).toFixed(2)
@@ -94,7 +101,7 @@
       <div class="box">
         <div class="img-side">
           <div class="img-wrap">
-            <img class="mimon-img" src="/assets/mimonq.png" alt="mimonq" />
+            <img class="mimon-img" src={defaultImg} alt="mimonq" />
           </div>
         </div>
         <div class="info-side">
