@@ -1,19 +1,9 @@
 <script lang="ts">
   import { ethers } from 'ethers'
   import { onDestroy } from 'svelte'
-  import {
-    isConnect,
-    myAddress,
-    myAddressShort,
-    signer,
-    provider,
-    myBalance,
-    MimonSaleContract,
-    isWhitelist,
-    isPreSaleCount,
-  } from '@/stores'
+  import { isConnect, myAddress, myAddressShort, signer, provider, myBalance } from '@/stores'
   const ethereum: any | undefined = (window as any).ethereum
-  import MimonSaleABI from '@/data/abi/MimonSale.json'
+  // import MimonSaleABI from '@/data/abi/MimonSale.json'
 
   onDestroy(() => {
     if ($isConnect === true) {
@@ -59,14 +49,14 @@
     $signer = $provider.getSigner()
     await getAddress()
     await getBalance()
-    await getIsWhitelist()
+    // await getIsWhitelist()
   }
 
   function changed() {
     ethereum.on('accountsChanged', async () => {
       await getAddress()
       await getBalance()
-      await getIsWhitelist()
+      // await getIsWhitelist()
     })
   }
 
@@ -84,11 +74,11 @@
     $myBalance = ethers.utils.formatEther(await $provider.getBalance($myAddress))
   }
 
-  async function getIsWhitelist() {
-    const mimonSaleContract = new ethers.Contract($MimonSaleContract, MimonSaleABI, $signer)
-    $isPreSaleCount = 3 - (await mimonSaleContract.preSaleCount($myAddress))
-    $isWhitelist = await mimonSaleContract.whitelist($myAddress)
-  }
+  // async function getIsWhitelist() {
+  //   const mimonSaleContract = new ethers.Contract($MimonSaleContract, MimonSaleABI, $signer)
+  //   $isPreSaleCount = 3 - (await mimonSaleContract.preSaleCount($myAddress))
+  //   $isWhitelist = await mimonSaleContract.whitelist($myAddress)
+  // }
 </script>
 
 <div class="connect-button" on:click={connect}>Wallet Connect</div>

@@ -15,5 +15,5 @@ export const MimonContract: any = readable('0x7fb4a2249fd66510c1d77B99454cd6B968
 // Sale Contract
 export const MimonSaleContract: any = readable('0xA33aAE8Bda6518838e2d027B1a71AB7735F0093D')
 export const mintAmount:any = writable(null)
-export const isWhitelist: any = writable(null)
-export const isPreSaleCount: any = writable(false)
+// export const isWhitelist: any = writable(null)
+// export const isPreSaleCount: any = writable(false)
