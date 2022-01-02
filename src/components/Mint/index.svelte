@@ -47,6 +47,44 @@
     }
   }
 
+  async function publicSale() {
+    const mimonSaleContract = new ethers.Contract($MimonSaleContract, MimonSaleABI, $signer)
+    let isPublicSale = await mimonSaleContract.isPublicSale()
+    let overrides = {
+      value: ethers.utils.parseEther(mintPrice),
+    }
+    const transaction = await mimonSaleContract
+      .publicSale($mintAmount, overrides)
+      .catch((data: any) => {
+        if (isPublicSale === false) {
+          alert('The public-sale has not started yet.')
+          setSpinner()
+          return
+        }
+        if ($isPreSaleCount < $mintAmount) {
+          alert('Please check the amount of mint')
+          setSpinner()
+          return
+        }
+        if (data.code === 4001) {
+          alert('The transaction has been canceled.')
+          setSpinner()
+          return
+        }
+        if (data.code === 'INSUFFICIENT_FUNDS') {
+          alert(`You don't have enough Ether in your wallet.`)
+          setSpinner()
+          return
+        }
+      })
+    setSpinner()
+    await transaction.wait()
+    $mintAmount = null
+    getPublicSalePrice()
+    calcMimonTotalSupply()
+    setSpinner()
+  }
+
   async function preSale() {
     const mimonSaleContract = new ethers.Contract($MimonSaleContract, MimonSaleABI, $signer)
     let isPreSale = await mimonSaleContract.isPreSale()
@@ -134,13 +172,13 @@
               Public sale : 0.06 ETH Maximum mint quantity : 15 Mimons
             </div>
             <div class="my-address">My Address: {$myAddressShort}</div>
-            {#if $isConnect}
-              <div class="simple-text">You are Whitelisted, you can mint {$isPreSaleCount}</div>
+            <!-- {#if $isConnect} -->
+              <!-- <div class="simple-text">You are Whitelisted, you can mint {$isPreSaleCount}</div> -->
               <!-- {:else if $isConnect && $isWhitelist === false}
               <div class="simple-text">
                 You are not on the white list. Please wait for the public sale.
               </div> -->
-            {/if}
+            <!-- {/if} -->
 
             <div class="divide-line" />
             <div class="info-sale-active">
@@ -150,13 +188,13 @@
               </div>
               <input
                 class="sale-amount"
-                placeholder="1 ~ 3"
+                placeholder="1 ~ 15"
                 type="text"
                 disabled={!$isConnect}
                 bind:value={$mintAmount}
                 on:input={(e) => {
-                  onInputCheckPreSale(e)
-                  getPreSalePrice()
+                  onInputCheck(e)
+                  getPublicSalePrice()
                 }}
               />
             </div>
@@ -166,7 +204,7 @@
               <div class="price-value"><b>{mintPrice} Eth</b> + Gas</div>
             </div>
             {#if $isConnect}
-              <MintButton {preSale} />
+              <MintButton {publicSale} />
             {:else}
               <Connect />
             {/if}
@@ -331,12 +369,12 @@
     text-align: center;
   }
 
-  .simple-text {
+  /* .simple-text {
     width: 100%;
     color: #f096a7;
     font-size: 0.8rem;
     margin-bottom: 10px;
-  }
+  } */
 
   .spiner {
     z-index: 100;
