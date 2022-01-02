@@ -19,7 +19,6 @@
   import MimonABI from '@/data/abi/Mimon.json'
   import { onMount } from 'svelte'
 
-  const PRESALE_PRICE: any = ethers.utils.formatEther('40000000000000000')
   const PUBLICSALE_PRICE: any = ethers.utils.formatEther('60000000000000000')
 
   let mintPrice: any = 0
@@ -33,13 +32,6 @@
 
   function onInputCheck(e: any) {
     if (!/^([1-9]{1}|1[0-5]{1})$/.test(e.target.value)) {
-      e.target.value = ''
-      $mintAmount = null
-    }
-  }
-
-  function onInputCheckPreSale(e: any) {
-    if (!/^([1-3]{1})$/.test(e.target.value)) {
       e.target.value = ''
       $mintAmount = null
     }
@@ -78,57 +70,6 @@
     setSpinner()
   }
 
-  // async function preSale() {
-  //   const mimonSaleContract = new ethers.Contract($MimonSaleContract, MimonSaleABI, $signer)
-  //   let isPreSale = await mimonSaleContract.isPreSale()
-  //   // if ($isWhitelist === false) {
-  //   //   alert('Only registered users on the whitelist can participate in the pre-sale.')
-  //   //   return
-  //   // }
-  //   let overrides = {
-  //     value: ethers.utils.parseEther(mintPrice),
-  //   }
-  //   const transaction = await mimonSaleContract
-  //     .preSale($mintAmount, overrides)
-  //     .catch((data: any) => {
-  //       if (isPreSale === false) {
-  //         alert('The public-sale has not started yet.')
-  //         setSpinner()
-  //         return
-  //       }
-  //       if ($isPreSaleCount < $mintAmount) {
-  //         alert('Please check the amount of mint')
-  //         setSpinner()
-  //         return
-  //       }
-  //       if (data.code === 4001) {
-  //         alert('The transaction has been canceled.')
-  //         setSpinner()
-  //         return
-  //       }
-  //       if (data.code === 'INSUFFICIENT_FUNDS') {
-  //         alert(`You don't have enough Ether in your wallet.`)
-  //         setSpinner()
-  //         return
-  //       }
-  //     })
-  //   setSpinner()
-  //   await transaction.wait()
-  //   $mintAmount = null
-  //   $isPreSaleCount = 3 - (await mimonSaleContract.preSaleCount($myAddress))
-  //   getPreSalePrice()
-  //   calcMimonTotalSupply()
-  //   setSpinner()
-  // }
-
-  // function getPreSalePrice() {
-  //   if ($mintAmount > 0) {
-  //     mintPrice = (PRESALE_PRICE * $mintAmount).toFixed(2)
-  //   } else {
-  //     mintPrice = 0
-  //   }
-  // }
-
   function getPublicSalePrice() {
     if ($mintAmount > 0) {
       mintPrice = (PUBLICSALE_PRICE * $mintAmount).toFixed(2)
@@ -165,14 +106,6 @@
               Public sale : 0.06 ETH Maximum mint quantity : 15 Mimons
             </div>
             <div class="my-address">My Address: {$myAddressShort}</div>
-            <!-- {#if $isConnect} -->
-            <!-- <div class="simple-text">You are Whitelisted, you can mint {$isPreSaleCount}</div> -->
-            <!-- {:else if $isConnect && $isWhitelist === false}
-              <div class="simple-text">
-                You are not on the white list. Please wait for the public sale.
-              </div> -->
-            <!-- {/if} -->
-
             <div class="divide-line" />
             <div class="info-sale-active">
               <div class="sale-state">
@@ -362,13 +295,6 @@
     text-align: center;
   }
 
-  /* .simple-text {
-    width: 100%;
-    color: #f096a7;
-    font-size: 0.8rem;
-    margin-bottom: 10px;
-  } */
-
   .spiner {
     z-index: 100;
     position: absolute;
@@ -393,7 +319,6 @@
       padding: 10px;
       display: flex;
       flex-direction: column;
-      /* justify-content: space-between; */
       align-items: center;
       overflow: scroll;
     }

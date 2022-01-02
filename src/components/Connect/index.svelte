@@ -49,14 +49,12 @@
     $signer = $provider.getSigner()
     await getAddress()
     await getBalance()
-    // await getIsWhitelist()
   }
 
   function changed() {
     ethereum.on('accountsChanged', async () => {
       await getAddress()
       await getBalance()
-      // await getIsWhitelist()
     })
   }
 
