@@ -99,6 +99,9 @@
   <div class="background-opacity">
     <div class="box-wrap">
       <div class="box">
+        <div class="info">Coming Soon!</div>
+      </div>
+      <!-- <div class="box">
         <div class="img-side">
           <div class="img-wrap">
             <img class="mimon-img" src={defaultImg} alt="mimonq" />
@@ -146,7 +149,7 @@
             </a>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
@@ -315,7 +318,28 @@
     height: 100vh;
   }
 
+  .info {
+    font-weight: bold;
+    font-size: 4rem;
+    color: #f096a7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 80vh;
+  }
+
   @media screen and (max-width: 768px) {
+    .info {
+      font-weight: bold;
+      font-size: 2.5rem;
+      color: #f096a7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 80vh;
+    }
     .box {
       width: 80%;
       height: auto;
